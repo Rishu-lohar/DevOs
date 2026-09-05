@@ -1,0 +1,1 @@
+export async function GET() { return Response.json({ message: "Authentication API is not enabled in Phase 1." }, { status: 501 }); }

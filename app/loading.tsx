@@ -1,0 +1,3 @@
+"use client";
+import { motion } from "framer-motion";
+export default function Loading() { return <main className="devos-glow flex min-h-screen items-center justify-center"><motion.div initial={{ opacity: 0, scale: .8 }} animate={{ opacity: 1, scale: 1 }} className="text-center"><motion.div animate={{ rotate: 360 }} transition={{ duration: 1.4, repeat: Infinity, ease: "linear" }} className="premium-gradient mx-auto flex h-14 w-14 items-center justify-center rounded-2xl text-2xl font-black text-[#080b11] shadow-[0_0_40px_rgba(124,92,255,.35)]">A</motion.div><p className="mt-5 text-sm text-slate-500">Preparing your workspace...</p></motion.div></main>; }
