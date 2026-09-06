@@ -1,5 +1,13 @@
 import type { HTMLAttributes } from "react";
 
-export function GlassCard({ className = "", children, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={`glass-card relative overflow-hidden rounded-[18px] border border-white/[.08] transition-all duration-300 hover:-translate-y-0.5 hover:border-white/[.14] ${className}`} {...props}><div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />{children}</div>;
+export function GlassCard({ className = "", children, "data-testid": testId, ...props }: HTMLAttributes<HTMLDivElement> & { "data-testid"?: string }) {
+  return (
+    <div
+      data-testid={testId || "flat-card"}
+      className={`rounded-[16px] border border-[#232326] bg-[#111113] transition-colors duration-150 hover:border-[#3F3F46] ${className}`}
+      {...props}
+    >
+      {children}
+    </div>
+  );
 }

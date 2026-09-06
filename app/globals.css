@@ -1,33 +1,39 @@
 @import "tailwindcss";
+@import "../styles/variables.css";
 @import "../styles/animations.css";
 
 :root {
   --background: #09090b;
-  --foreground: #f7f7f8;
-  --muted: #8b8b95;
-  --muted-dark: #5c5c66;
+  --foreground: #fafafa;
+  --muted: #a1a1aa;
+  --muted-dark: #71717a;
+  
   --surface-0: #09090b;
-  --surface-1: #101014;
-  --surface-2: #15151b;
-  --surface-3: #1b1b22;
-  --surface-glass: rgba(20, 20, 25, 0.72);
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-strong: rgba(255, 255, 255, 0.13);
-  --accent: #a78bfa;
-  --accent-strong: #8b5cf6;
-  --accent-soft: rgba(139, 92, 246, 0.14);
-  --accent-glow: rgba(139, 92, 246, 0.28);
-  --success: #34d399;
-  --warning: #fbbf24;
-  --danger: #fb7185;
-  --info: #60a5fa;
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
-  --shadow-card: 0 18px 50px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.045);
-  --shadow-float: 0 28px 80px rgba(0, 0, 0, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --surface-1: #111113;
+  --surface-2: #18181b;
+  --surface-3: #1f1f23;
+  
+  --border-subtle: #232326;
+  --border-strong: #3f3f46;
+  
+  --accent: #7c5cfc;
+  --accent-hover: #6b46f7;
+  --accent-active: #5a32f5;
+  --accent-soft: rgba(124, 92, 252, 0.12);
+  --accent-border: rgba(124, 92, 252, 0.25);
+  
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #38bdf8;
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 16px;
+  
+  --shadow-none: none;
+  --ease-flat: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
@@ -37,60 +43,95 @@
   --font-mono: var(--font-geist-mono);
 }
 
-* { box-sizing: border-box; border-color: var(--border-subtle); }
-html { color-scheme: dark; scroll-behavior: smooth; }
+* {
+  box-sizing: border-box;
+  border-color: #232326;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  background-color: #09090b;
+}
+
 body {
   min-width: 320px;
   overflow-x: hidden;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #09090b;
+  color: #fafafa;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   letter-spacing: -0.012em;
-  background-image:
-    radial-gradient(ellipse 75% 45% at 50% -16%, rgba(139, 92, 246, 0.14), transparent 72%),
-    radial-gradient(circle at 96% 4%, rgba(255, 255, 255, 0.035), transparent 28rem);
-  background-attachment: fixed;
 }
 
-::selection { background: rgba(139, 92, 246, 0.34); color: #fff; }
-button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
-button, a { transition-timing-function: var(--ease-premium); }
-
-::-webkit-scrollbar { width: 7px; height: 7px; }
-::-webkit-scrollbar-track { background: var(--surface-0); }
-::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(255, 255, 255, 0.12); }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.22); }
-
-.devos-grid {
-  background-image: linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-.devos-glow {
-  background:
-    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(139, 92, 246, .12), transparent 75%),
-    radial-gradient(circle at 5% 18%, rgba(96, 165, 250, .055), transparent 30rem),
-    var(--surface-0);
+::selection {
+  background: rgba(124, 92, 252, 0.3);
+  color: #ffffff;
 }
 
-.glass-panel, .glass-card {
-  border: 1px solid var(--border-subtle);
-  background: var(--surface-glass);
-  box-shadow: var(--shadow-card);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+button, a, input, textarea, select {
+  -webkit-tap-highlight-color: transparent;
 }
-.glass-panel { border-radius: var(--radius-xl); }
-.glass-card { border-radius: var(--radius-lg); }
-.glass-panel:hover, .glass-card:hover { border-color: var(--border-strong); }
 
-.premium-gradient { background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%); }
-.premium-gradient-hover:hover { filter: brightness(1.08); box-shadow: 0 0 34px var(--accent-glow); }
-.focus-ring { outline: none; border-color: var(--accent-strong); box-shadow: 0 0 0 4px var(--accent-soft); }
-.rim-highlight { position: relative; }
-.rim-highlight::before { content: ""; position: absolute; inset: 0 20% auto; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent); pointer-events: none; }
+button, a {
+  transition-timing-function: var(--ease-flat);
+  transition-duration: 150ms;
+}
 
-.fireflies-tag-purple { background: rgba(124, 58, 237, .16); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, .3); }
-.fireflies-tag-emerald { background: rgba(16, 185, 129, .14); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, .28); }
-.fireflies-tag-amber { background: rgba(245, 158, 11, .14); color: #fcd34d; border: 1px solid rgba(245, 158, 11, .28); }
-.fireflies-tag-blue { background: rgba(59, 130, 246, .14); color: #93c5fd; border: 1px solid rgba(59, 130, 246, .28); }
-.fireflies-tag-rose { background: rgba(244, 63, 94, .14); color: #fda4af; border: 1px solid rgba(244, 63, 94, .28); }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: #232326;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+/* Card classes - Flat matte */
+.fireflies-card, .glass-panel, .glass-card {
+  border: 1px solid #232326;
+  background-color: #111113;
+  border-radius: 16px;
+}
+
+.fireflies-card:hover, .glass-panel:hover, .glass-card:hover {
+  border-color: #3f3f46;
+}
+
+/* Flat Badges & Tags */
+.fireflies-tag-purple {
+  background-color: rgba(124, 92, 252, 0.12);
+  color: #c4b5fd;
+  border: 1px solid rgba(124, 92, 252, 0.25);
+}
+
+.fireflies-tag-emerald {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #86efac;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.fireflies-tag-amber {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.fireflies-tag-blue {
+  background-color: rgba(56, 189, 248, 0.1);
+  color: #bae6fd;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.fireflies-tag-rose {
+  background-color: rgba(244, 63, 94, 0.1);
+  color: #fecdd3;
+  border: 1px solid rgba(244, 63, 94, 0.25);
+}

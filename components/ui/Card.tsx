@@ -1,5 +1,11 @@
 import type { HTMLAttributes } from "react";
 
-export function Card({ className = "", ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={`rounded-[18px] border border-white/[.07] bg-[#111115]/80 shadow-[0_18px_50px_rgba(0,0,0,.3)] backdrop-blur-xl transition-all duration-300 hover:border-white/[.13] ${className}`} {...props} />;
+export function Card({ className = "", "data-testid": testId, ...props }: HTMLAttributes<HTMLDivElement> & { "data-testid"?: string }) {
+  return (
+    <div
+      data-testid={testId || "ui-card"}
+      className={`rounded-[16px] border border-[#232326] bg-[#111113] transition-colors duration-150 hover:border-[#3F3F46] ${className}`}
+      {...props}
+    />
+  );
 }

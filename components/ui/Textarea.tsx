@@ -1,9 +1,14 @@
 import type { TextareaHTMLAttributes } from "react";
 
-export function Textarea({ className = "", ...props }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+export function Textarea({
+  className = "",
+  "data-testid": testId,
+  ...props
+}: TextareaHTMLAttributes<HTMLTextAreaElement> & { "data-testid"?: string }) {
   return (
     <textarea
-      className={`min-h-24 w-full rounded-xl border border-white/[0.09] bg-[#0c1018]/80 p-3.5 text-sm text-white outline-none transition-all placeholder:text-slate-500 hover:border-white/[0.16] focus:border-violet-500/80 focus:bg-[#101420] focus:ring-4 focus:ring-violet-500/15 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+      data-testid={testId || "ui-textarea"}
+      className={`min-h-24 w-full rounded-[12px] border border-[#232326] bg-[#111113] p-3.5 text-sm text-[#FAFAFA] outline-none transition-colors duration-150 placeholder:text-[#71717A] hover:border-[#3F3F46] focus:border-[#7C5CFC] disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
       {...props}
     />
   );

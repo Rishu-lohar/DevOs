@@ -1,12 +1,12 @@
 import { Spinner } from "../ui/Spinner";
 
-export function LoadingScreen() {
+export function LoadingScreen({ "data-testid": testId }: { "data-testid"?: string }) {
   return (
-    <div className="flex min-h-[45vh] flex-col items-center justify-center gap-3">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.03] shadow-[0_0_25px_rgba(139,92,246,0.15)]">
+    <div data-testid={testId || "loading-screen"} className="flex min-h-[45vh] flex-col items-center justify-center gap-3">
+      <div className="flex h-11 w-11 items-center justify-center rounded-[12px] border border-[#232326] bg-[#111113]">
         <Spinner className="h-5 w-5" />
       </div>
-      <p className="text-xs font-medium text-slate-500">Loading DevOS workspace...</p>
+      <p className="text-xs font-medium text-[#71717A]">Loading DevOS workspace...</p>
     </div>
   );
 }

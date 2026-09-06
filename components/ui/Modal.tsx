@@ -9,41 +9,42 @@ export function Modal({
   onClose,
   title,
   children,
+  "data-testid": testId,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
+  "data-testid"?: string;
 }) {
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div data-testid={testId || "ui-modal"} className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/75 backdrop-blur-md"
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 bg-black/75"
             onClick={onClose}
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 8 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 8 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="relative z-10 w-full max-w-lg overflow-hidden rounded-[24px] border border-white/[0.12] bg-[#0c1018]/95 p-6 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="relative z-10 w-full max-w-lg overflow-hidden rounded-[16px] border border-[#232326] bg-[#111113] p-6"
           >
-            {/* Top rim highlight */}
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-400/40 to-transparent" />
-
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-lg font-semibold tracking-tight text-white">{title}</h2>
+            <div className="mb-5 flex items-center justify-between border-b border-[#232326] pb-4">
+              <h2 className="text-base font-semibold tracking-tight text-[#FAFAFA]">{title}</h2>
               <button
+                data-testid="modal-close-button"
                 onClick={onClose}
                 aria-label="Close"
-                className="rounded-lg p-1.5 text-slate-400 transition hover:bg-white/10 hover:text-white"
+                className="rounded-[8px] p-1.5 text-[#71717A] transition-colors duration-150 hover:bg-[#18181B] hover:text-[#FAFAFA]"
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
             {children}

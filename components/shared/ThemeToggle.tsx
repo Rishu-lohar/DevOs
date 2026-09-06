@@ -3,11 +3,16 @@
 import { Moon, Sun } from "lucide-react";
 import { useState } from "react";
 
-export function ThemeToggle() {
+export function ThemeToggle({ "data-testid": testId }: { "data-testid"?: string }) {
   const [dark, setDark] = useState(true);
   return (
-    <button onClick={() => setDark(!dark)} aria-label="Toggle theme" className="rounded-xl p-2.5 text-slate-400 transition-colors hover:bg-white/[.06] hover:text-white">
-      {dark ? <Moon size={18} /> : <Sun size={18} className="text-amber-400" />}
+    <button
+      data-testid={testId || "theme-toggle-button"}
+      onClick={() => setDark(!dark)}
+      aria-label="Toggle theme"
+      className="rounded-[8px] p-2 text-[#71717A] transition-colors duration-150 hover:bg-[#18181B] hover:text-[#FAFAFA]"
+    >
+      {dark ? <Moon size={17} /> : <Sun size={17} className="text-[#FBBF24]" />}
     </button>
   );
 }

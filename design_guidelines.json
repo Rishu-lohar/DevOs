@@ -1,0 +1,121 @@
+{
+  "project_name": "DevOS - Developer Operating System",
+  "archetype": "SWISS & HIGH-CONTRAST / FLAT MATTE ENTERPRISE SAAS",
+  "visual_reference": "Fireflies.ai, Linear, Vercel, Raycast",
+  "theme": {
+    "mode": "dark",
+    "background": "#09090B",
+    "surface": "#111113",
+    "surface_secondary": "#18181B",
+    "border": "#232326",
+    "border_hover": "#3F3F46",
+    "primary": "#7C5CFC",
+    "primary_hover": "#6B46F7",
+    "primary_active": "#5A32F5",
+    "primary_foreground": "#FFFFFF",
+    "secondary": "#18181B",
+    "secondary_foreground": "#FAFAFA",
+    "secondary_hover": "#232326",
+    "ghost_hover": "#18181B",
+    "text_primary": "#FAFAFA",
+    "text_secondary": "#A1A1AA",
+    "text_muted": "#71717A",
+    "status": {
+      "success": "#22C55E",
+      "warning": "#F59E0B",
+      "error": "#EF4444",
+      "info": "#3B82F6"
+    }
+  },
+  "forbidden_elements": [
+    "NO shadows anywhere (box-shadow: none !important, shadow-none)",
+    "NO glow effects (drop-shadow, filter blur glow, neon borders)",
+    "NO glassmorphism / backdrop-blur (use solid background #09090B / #111113 / #18181B with solid border #232326)",
+    "NO gradient background overlays or radial color lights",
+    "NO bouncy or flashy 3D/complex physics scroll animations",
+    "NO transparent dropdowns, headers, or overlays without solid surfaces"
+  ],
+  "typography": {
+    "font_family_heading": "Plus Jakarta Sans, Geist, sans-serif",
+    "font_family_body": "Inter, Geist, sans-serif",
+    "font_family_mono": "JetBrains Mono, Fira Code, monospace",
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#FAFAFA]",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-[#FAFAFA]",
+      "h3": "text-xl sm:text-2xl font-medium tracking-tight text-[#FAFAFA]",
+      "h4": "text-lg sm:text-xl font-medium text-[#FAFAFA]",
+      "body_lg": "text-base text-[#A1A1AA] leading-relaxed",
+      "body": "text-sm text-[#A1A1AA] leading-normal",
+      "caption": "text-xs text-[#71717A] uppercase tracking-wider font-semibold"
+    }
+  },
+  "components": {
+    "card": {
+      "background": "#111113",
+      "border": "1px solid #232326",
+      "radius": "16px (rounded-2xl)",
+      "shadow": "none",
+      "padding": "p-6 sm:p-8"
+    },
+    "navbar": {
+      "background": "#09090B",
+      "border_bottom": "1px solid #232326",
+      "position": "sticky top-0 z-50",
+      "shadow": "none"
+    },
+    "sidebar": {
+      "background": "#09090B",
+      "border_right": "1px solid #232326",
+      "active_item_bg": "#18181B",
+      "active_indicator": "bg-[#7C5CFC] w-1 h-5 rounded-full",
+      "shadow": "none"
+    },
+    "buttons": {
+      "primary": "bg-[#7C5CFC] hover:bg-[#6B46F7] text-white font-medium rounded-xl px-4 py-2.5 transition-colors duration-150 border-0 shadow-none",
+      "secondary": "bg-[#18181B] hover:bg-[#232326] text-[#FAFAFA] border border-[#232326] font-medium rounded-xl px-4 py-2.5 transition-colors duration-150 shadow-none",
+      "ghost": "bg-transparent hover:bg-[#18181B] text-[#A1A1AA] hover:text-[#FAFAFA] font-medium rounded-xl px-3 py-2 transition-colors duration-150 shadow-none"
+    },
+    "inputs": {
+      "background": "#111113",
+      "border": "1px solid #232326",
+      "focus_border": "border-[#7C5CFC]",
+      "text": "text-[#FAFAFA]",
+      "placeholder": "placeholder-[#71717A]",
+      "radius": "rounded-xl"
+    }
+  },
+  "motion": {
+    "transition_duration": "150ms",
+    "easing": "ease-in-out",
+    "allowed_animations": "subtle opacity fade, 150ms border-color transitions, instant tab switching"
+  },
+  "layout_and_spacing": {
+    "page_padding": "p-6 lg:p-10 max-w-7xl mx-auto space-y-8",
+    "bento_grid_mode": "High Density Flat Grid (MODE B)",
+    "grid_cols": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+    "whitespace_philosophy": "Generous spacing philosophy (2x whitespace), zero visual clutter, flat surfaces separated only by #232326 borders"
+  },
+  "accessibility_and_testing": {
+    "contrast_ratio": "Minimum 4.5:1 for body text (#A1A1AA over #111113), 7:1 for headers",
+    "testing_attribute": "Every interactive element MUST include data-testid (e.g. data-testid=\"nav-dashboard-link\", data-testid=\"create-task-button\")"
+  },
+  "image_urls": {
+    "avatars": [
+      {
+        "url": "https://images.unsplash.com/photo-1566753323558-f4e0952af115?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjV8MHwxfHNlYXJjaHwzfHxkZXZlbG9wZXIlMjBwb3J0cmFpdCUyMGF2YXRhciUyMGNvZGluZyUyMHByb2Zlc3Npb25hbHxlbnwwfHx8fDE3ODg3MTg0NjJ8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Developer portrait avatar"
+      },
+      {
+        "url": "https://images.pexels.com/photos/19805878/pexels-photo-19805878.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Developer coding avatar"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Ensure centralized theme is defined in constants/theme.ts and global CSS variables in globals.css",
+    "Strictly adhere to the #09090B background, #111113 cards, #232326 borders, and 16px radius",
+    "Remove shadow-*, backdrop-blur-*, glow, gradients, or floating effects across all components",
+    "Maintain exact business logic, routes, and layout structures while updating design language to match Fireflies.ai flat matte dark theme",
+    "Ensure all buttons, cards, links, inputs, and widgets include data-testid attributes for testing"
+  ]
+}

@@ -2,16 +2,156 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
-import { ChartBar as BarChart3, Bot, Boxes, SquareCheck as CheckSquare2, ChevronDown, ChevronRight, FolderKanban, GitBranch, Grid2x2X as Grid2X2, Lightbulb, MessageCircle, ClipboardList, Settings, Sparkles, Zap, X } from "lucide-react";
+import {
+  BarChart3,
+  Bot,
+  Boxes,
+  CheckSquare,
+  ChevronRight,
+  FolderKanban,
+  GitBranch,
+  Grid2X2,
+  Lightbulb,
+  MessageCircle,
+  ClipboardList,
+  Settings,
+  Sparkles,
+  Zap,
+  X,
+} from "lucide-react";
 
 export const navigationItems = [
-  { label: "Dashboard", href: "/dashboard", icon: Grid2X2 }, { label: "Workspace", href: "/workspace", icon: Boxes }, { label: "Projects", href: "/projects", icon: FolderKanban }, { label: "Tasks", href: "/tasks", icon: CheckSquare2 }, { label: "Collaboration", href: "/collaboration", icon: MessageCircle }, { label: "GitHub", href: "/github", icon: GitBranch }, { label: "Open Source", href: "/open-source", icon: Lightbulb }, { label: "Industry Intelligence", href: "/industry", icon: Sparkles }, { label: "Growth Tracker", href: "/growth", icon: BarChart3 }, { label: "AI Mentor", href: "/ai-mentor", icon: Bot }, { label: "Reports", href: "/reports", icon: ClipboardList }, { label: "Settings", href: "/settings", icon: Settings },
+  { label: "Dashboard", href: "/dashboard", icon: Grid2X2 },
+  { label: "Workspace", href: "/workspace", icon: Boxes },
+  { label: "Projects", href: "/projects", icon: FolderKanban },
+  { label: "Tasks", href: "/tasks", icon: CheckSquare },
+  { label: "Collaboration", href: "/collaboration", icon: MessageCircle },
+  { label: "GitHub", href: "/github", icon: GitBranch },
+  { label: "Open Source", href: "/open-source", icon: Lightbulb },
+  { label: "Industry Intelligence", href: "/industry", icon: Sparkles },
+  { label: "Growth Tracker", href: "/growth", icon: BarChart3 },
+  { label: "AI Mentor", href: "/ai-mentor", icon: Bot },
+  { label: "Reports", href: "/reports", icon: ClipboardList },
+  { label: "Settings", href: "/settings", icon: Settings },
 ];
 
-type SidebarProps = { open?: boolean; onClose?: () => void };
+type SidebarProps = {
+  open?: boolean;
+  onClose?: () => void;
+  "data-testid"?: string;
+};
 
-export function Sidebar({ open = true, onClose }: SidebarProps) {
+export function Sidebar({ open = true, onClose, "data-testid": testId }: SidebarProps) {
   const pathname = usePathname();
-  return <><div aria-label="Close navigation" className={`fixed inset-0 z-40 bg-black/70 backdrop-blur-sm transition-opacity lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`} onClick={onClose} /><motion.aside initial={false} animate={{ x: open ? 0 : "-100%" }} transition={{ duration: .22, ease: "easeOut" }} className="fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col border-r border-white/[.06] bg-[#0b0b0e]/95 px-3.5 py-5 shadow-[0_20px_60px_rgba(0,0,0,.8)] backdrop-blur-2xl lg:static lg:translate-x-0"><div className="flex items-center justify-between border-b border-white/[.06] px-2 pb-5"><Link href="/dashboard" className="group flex items-center gap-2.5" onClick={onClose}><div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-pink-500 to-violet-600 shadow-[0_0_18px_rgba(139,92,246,.28)] transition-transform group-hover:scale-105"><Sparkles size={16} /></div><div><div className="text-sm font-semibold tracking-tight text-white">devos<span className="text-rose-400">.ai</span></div><div className="text-[9px] font-medium tracking-wide text-slate-500">Developer Operating System</div></div></Link><button className="rounded-lg p-1.5 text-slate-500 hover:bg-white/5 hover:text-white lg:hidden" onClick={onClose} aria-label="Close menu"><X size={18} /></button></div><nav className="mt-4 flex-1 space-y-0.5 overflow-y-auto pr-1" aria-label="Primary navigation">{navigationItems.map((item) => { const Icon = item.icon; const active = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href)); return <Link key={item.href} href={item.href} onClick={onClose} className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium transition-all ${active ? "text-white" : "text-slate-500 hover:bg-white/[.04] hover:text-slate-200"}`}>{active && <motion.div layoutId="activeSidebarIndicator" className="absolute inset-0 rounded-xl border border-violet-400/20 bg-violet-500/[.1]" transition={{ type: "spring", stiffness: 450, damping: 35 }} />}<Icon size={16} strokeWidth={1.8} className={`relative z-10 ${active ? "text-violet-300" : "text-slate-600 group-hover:text-slate-300"}`} /><span className="relative z-10 flex-1 truncate">{item.label}</span>{active && <ChevronRight size={13} className="relative z-10 text-slate-500" />}</Link>; })}</nav><div className="mt-auto space-y-2.5 border-t border-white/[.06] pt-3"><div className="rounded-xl border border-violet-400/15 bg-violet-500/[.07] p-3"><div className="flex items-center gap-2.5"><div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/15 text-violet-300"><Zap size={14} /></div><div className="min-w-0 flex-1"><p className="text-[11px] font-semibold text-white">DevOS Pro Tier</p><p className="text-[9px] text-slate-500">Autonomous AI enabled</p></div><span className="rounded-full bg-violet-500/15 px-1.5 py-0.5 text-[9px] text-violet-300">Active</span></div></div><div className="flex items-center gap-2.5 rounded-xl border border-white/[.07] bg-white/[.025] p-2.5"><div className="relative h-7 w-7 rounded-full border border-violet-400/30 bg-gradient-to-tr from-violet-600 to-indigo-600 p-0.5"><div className="flex h-full w-full items-center justify-center rounded-full bg-[#17171d] text-[10px] font-bold text-white">RL</div><span className="absolute bottom-0 right-0 h-2 w-2 rounded-full border border-[#0b0b0e] bg-emerald-400" /></div><div className="min-w-0 flex-1"><p className="truncate text-[11px] font-semibold text-white">Rishu Lohar</p><p className="truncate text-[9px] text-slate-500">rishu@devos.ai</p></div><ChevronDown size={13} className="text-slate-600" /></div></div></motion.aside></>;
+
+  return (
+    <>
+      {/* Mobile Backdrop */}
+      <div
+        aria-label="Close navigation"
+        className={`fixed inset-0 z-40 bg-black/75 transition-opacity duration-150 lg:hidden ${
+          open ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onClick={onClose}
+      />
+
+      <aside
+        data-testid={testId || "main-sidebar"}
+        className={`fixed inset-y-0 left-0 z-50 flex w-[240px] flex-col border-r border-[#232326] bg-[#09090B] px-3 py-4 transition-transform duration-150 ease-out lg:static lg:translate-x-0 ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {/* Brand Header */}
+        <div className="flex items-center justify-between border-b border-[#232326] px-2 pb-4">
+          <Link
+            href="/dashboard"
+            data-testid="sidebar-brand-logo"
+            className="group flex items-center gap-2.5"
+            onClick={onClose}
+          >
+            <div className="flex h-7 w-7 items-center justify-center rounded-[8px] bg-[#7C5CFC] text-white">
+              <Sparkles size={14} />
+            </div>
+            <div>
+              <div className="text-sm font-semibold tracking-tight text-[#FAFAFA]">
+                devos<span className="text-[#7C5CFC]">.ai</span>
+              </div>
+              <div className="text-[9px] font-medium tracking-wide text-[#71717A]">
+                Developer OS
+              </div>
+            </div>
+          </Link>
+          <button
+            className="rounded-[6px] p-1.5 text-[#71717A] hover:bg-[#18181B] hover:text-[#FAFAFA] lg:hidden"
+            onClick={onClose}
+            aria-label="Close menu"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Navigation Items */}
+        <nav className="mt-4 flex-1 space-y-0.5 overflow-y-auto pr-1" aria-label="Primary navigation">
+          {navigationItems.map((item) => {
+            const Icon = item.icon;
+            const active =
+              pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                data-testid={`sidebar-link-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
+                onClick={onClose}
+                className={`group relative flex items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-xs font-medium transition-colors duration-150 ${
+                  active
+                    ? "bg-[#18181B] text-[#FAFAFA] font-medium"
+                    : "text-[#71717A] hover:bg-[#111113] hover:text-[#FAFAFA]"
+                }`}
+              >
+                {active && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-1 rounded-r-full bg-[#7C5CFC]" />
+                )}
+                <Icon
+                  size={15}
+                  strokeWidth={1.75}
+                  className={active ? "text-[#7C5CFC]" : "text-[#71717A] group-hover:text-[#FAFAFA]"}
+                />
+                <span className="flex-1 truncate">{item.label}</span>
+                {active && <ChevronRight size={12} className="text-[#52525B]" />}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Bottom Tier & User Profile */}
+        <div className="mt-auto space-y-2.5 border-t border-[#232326] pt-3">
+          <div className="rounded-[12px] border border-[#232326] bg-[#111113] p-3">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-[rgba(124,92,252,0.12)] text-[#7C5CFC]">
+                <Zap size={13} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-semibold text-[#FAFAFA]">DevOS Pro Tier</p>
+                <p className="text-[9px] text-[#71717A]">Autonomous AI active</p>
+              </div>
+              <span className="rounded-full bg-[rgba(124,92,252,0.12)] px-1.5 py-0.5 text-[9px] font-medium text-[#C4B5FD] border border-[rgba(124,92,252,0.25)]">
+                Active
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5 rounded-[12px] border border-[#232326] bg-[#111113] p-2">
+            <div className="relative flex h-7 w-7 items-center justify-center rounded-full border border-[#232326] bg-[#18181B] text-[10px] font-medium text-[#FAFAFA]">
+              RL
+              <span className="absolute bottom-0 right-0 h-1.5 w-1.5 rounded-full bg-[#22C55E]" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[11px] font-semibold text-[#FAFAFA]">Rishu Lohar</p>
+              <p className="truncate text-[9px] text-[#71717A]">rishu@devos.ai</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </>
+  );
 }
