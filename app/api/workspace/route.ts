@@ -1,1 +1,0 @@
-export async function GET() { return Response.json({ message: "Workspace API is not enabled in Phase 1." }, { status: 501 }); }

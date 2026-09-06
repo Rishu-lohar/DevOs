@@ -1,1 +1,0 @@
-export { SearchInput as SearchBar } from "../ui/SearchInput";
