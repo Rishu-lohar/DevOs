@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { LayoutGrid, List, Plus } from "lucide-react";
+import { LayoutGrid, List, Pencil, Plus, Trash2 } from "lucide-react";
 import { PageBody, PageHeader } from "@/components/layout/page";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -11,13 +11,97 @@ import { EmptyState, Progress } from "@/components/ui/feedback";
 import { TBody, TD, TH, THead, TR, Table } from "@/components/ui/table";
 import { HealthBadge, StatCard } from "@/components/domain/primitives";
 import { FilterMenu, SearchField } from "@/components/domain/filters";
-import { projects } from "@/lib/data";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input, Label, Textarea } from "@/components/ui/input";
+import { apiRequest } from "@/lib/client-api";
+import type { Project } from "@/lib/types";
 import { cn } from "@/lib/utils";
+
+type ProjectRecord = {
+  id: string;
+  name: string;
+  description: string | null;
+  status: string;
+  createdAt: string;
+  userId: string;
+  user: { id: string; name: string };
+  tasks: { id: string; status: string }[];
+};
+
+type ProjectView = Project & { userId: string };
+type UserOption = { id: string; name: string };
+
+type DashboardUsersResponse = {
+  data: { users: UserOption[] };
+};
+
+function toProjectView(record: ProjectRecord): ProjectView {
+  const totalTasks = record.tasks.length;
+  const doneTasks = record.tasks.filter((task) => task.status === "DONE").length;
+
+  return {
+    id: record.id,
+    name: record.name,
+    slug: `${record.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${record.id.slice(-5)}`,
+    description: record.description ?? "",
+    progress: totalTasks ? Math.round((doneTasks / totalTasks) * 100) : 0,
+    health: record.status === "ACTIVE" ? "on-track" : "at-risk",
+    stack: [],
+    members: [record.user.name],
+    lead: record.user.name,
+    due: "Not set",
+    openTasks: totalTasks - doneTasks,
+    totalTasks,
+    updatedAt: new Date(record.createdAt).toLocaleDateString(),
+    userId: record.userId,
+  };
+}
 
 export default function ProjectsPage() {
   const [query, setQuery] = React.useState("");
   const [health, setHealth] = React.useState("all");
   const [view, setView] = React.useState<"grid" | "list">("grid");
+  const [projects, setProjects] = React.useState<ProjectView[]>([]);
+  const [users, setUsers] = React.useState<UserOption[]>([]);
+  const [error, setError] = React.useState("");
+  const [editorError, setEditorError] = React.useState("");
+  const [editorOpen, setEditorOpen] = React.useState(false);
+  const [editingProject, setEditingProject] = React.useState<ProjectView | null>(null);
+
+  const loadData = React.useCallback(async () => {
+    try {
+      const [projectRecords, dashboard] = await Promise.all([
+        apiRequest<ProjectRecord[]>("/api/projects"),
+        apiRequest<DashboardUsersResponse>("/api/dashboard"),
+      ]);
+      setProjects(projectRecords.map(toProjectView));
+      setUsers(dashboard.data.users);
+      setError("");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Failed to load projects");
+    }
+  }, []);
+
+  React.useEffect(() => {
+    Promise.all([
+      apiRequest<ProjectRecord[]>("/api/projects"),
+      apiRequest<DashboardUsersResponse>("/api/dashboard"),
+    ])
+      .then(([projectRecords, dashboard]) => {
+        setProjects(projectRecords.map(toProjectView));
+        setUsers(dashboard.data.users);
+      })
+      .catch((cause: unknown) => {
+        setError(cause instanceof Error ? cause.message : "Failed to load projects");
+      });
+  }, []);
 
   const filtered = React.useMemo(
     () =>
@@ -31,8 +115,49 @@ export default function ProjectsPage() {
         const matchH = health === "all" || p.health === health;
         return matchQ && matchH;
       }),
-    [query, health],
+    [projects, query, health],
   );
+
+  async function saveProject(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const payload = {
+      name: String(form.get("name") ?? ""),
+      description: String(form.get("description") ?? ""),
+      userId: String(form.get("userId") ?? ""),
+    };
+
+    try {
+      await apiRequest(
+        editingProject ? `/api/projects/${editingProject.id}` : "/api/projects",
+        {
+          method: editingProject ? "PATCH" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
+      setEditorOpen(false);
+      await loadData();
+    } catch (cause) {
+      setEditorError(cause instanceof Error ? cause.message : "Failed to save project");
+    }
+  }
+
+  async function deleteProject(project: ProjectView) {
+    if (!window.confirm(`Delete "${project.name}"?`)) return;
+    try {
+      await apiRequest(`/api/projects/${project.id}`, { method: "DELETE" });
+      await loadData();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Failed to delete project");
+    }
+  }
+
+  function openEditor(project?: ProjectView) {
+    setEditingProject(project ?? null);
+    setEditorError("");
+    setEditorOpen(true);
+  }
 
   return (
     <>
@@ -40,7 +165,7 @@ export default function ProjectsPage() {
         title="Projects"
         description="Create and organise all of your engineering projects."
         actions={
-          <Button variant="primary" size="sm" data-testid="projects-new">
+          <Button variant="primary" size="sm" onClick={() => openEditor()} data-testid="projects-new">
             <Plus className="h-3 w-3" />
             New project
           </Button>
@@ -48,11 +173,12 @@ export default function ProjectsPage() {
       />
 
       <PageBody className="space-y-4">
+        {error && <p role="alert" className="text-[12px] text-danger">{error}</p>}
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard label="Total projects" value={String(projects.length)} hint="across the workspace" />
           <StatCard label="On track" value={String(projects.filter((p) => p.health === "on-track").length)} hint="healthy delivery" />
           <StatCard label="At risk" value={String(projects.filter((p) => p.health !== "on-track").length)} hint="need attention" />
-          <StatCard label="Avg. progress" value={`${Math.round(projects.reduce((s, p) => s + p.progress, 0) / projects.length)}%`} hint="completion" />
+          <StatCard label="Avg. progress" value={`${Math.round(projects.reduce((s, p) => s + p.progress, 0) / (projects.length || 1))}%`} hint="completion" />
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -157,7 +283,15 @@ export default function ProjectsPage() {
 
                 <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
                   <AvatarGroup names={p.members} max={3} size="sm" />
-                  <span className="text-[11px] text-text-muted">Due {p.due}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-text-muted">Due {p.due}</span>
+                    <Button variant="ghost" size="xs" onClick={() => openEditor(p)} aria-label={`Edit ${p.name}`}>
+                      <Pencil className="h-3 w-3" />
+                    </Button>
+                    <Button variant="ghost" size="xs" onClick={() => void deleteProject(p)} aria-label={`Delete ${p.name}`}>
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
                 </div>
               </Card>
             ))}
@@ -173,6 +307,7 @@ export default function ProjectsPage() {
                   <TH className="w-[160px]">Progress</TH>
                   <TH className="text-right">Tasks</TH>
                   <TH className="text-right">Due</TH>
+                  <TH className="text-right">Actions</TH>
                 </TR>
               </THead>
               <TBody>
@@ -196,6 +331,14 @@ export default function ProjectsPage() {
                     </TD>
                     <TD className="text-right">{p.openTasks}/{p.totalTasks}</TD>
                     <TD className="text-right">{p.due}</TD>
+                    <TD className="text-right">
+                      <Button variant="ghost" size="xs" onClick={() => openEditor(p)} aria-label={`Edit ${p.name}`}>
+                        <Pencil className="h-3 w-3" />
+                      </Button>
+                      <Button variant="ghost" size="xs" onClick={() => void deleteProject(p)} aria-label={`Delete ${p.name}`}>
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </TD>
                   </TR>
                 ))}
               </TBody>
@@ -203,6 +346,48 @@ export default function ProjectsPage() {
           </Card>
         )}
       </PageBody>
+      <Dialog open={editorOpen} onOpenChange={setEditorOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{editingProject ? "Edit project" : "New project"}</DialogTitle>
+            <DialogDescription>Save project details to your workspace.</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={saveProject}>
+            <div className="space-y-3 p-4">
+              {editorError && <p role="alert" className="text-[12px] text-danger">{editorError}</p>}
+              {users.length === 0 && (
+                <p role="alert" className="text-[12px] text-danger">
+                  Add a workspace user before creating or assigning projects.
+                </p>
+              )}
+              <div>
+                <Label htmlFor="project-name">Name</Label>
+                <Input id="project-name" name="name" required defaultValue={editingProject?.name ?? ""} />
+              </div>
+              <div>
+                <Label htmlFor="project-description">Description</Label>
+                <Textarea id="project-description" name="description" defaultValue={editingProject?.description ?? ""} />
+              </div>
+              <div>
+                <Label htmlFor="project-owner">Owner</Label>
+                <select
+                  id="project-owner"
+                  name="userId"
+                  required
+                  defaultValue={editingProject?.userId ?? users[0]?.id ?? ""}
+                  className="h-8 w-full rounded-md border border-border bg-surface px-2.5 text-[13px] text-text-primary"
+                >
+                  {users.map((user) => <option key={user.id} value={user.id}>{user.name}</option>)}
+                </select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="secondary" size="sm" onClick={() => setEditorOpen(false)}>Cancel</Button>
+              <Button type="submit" variant="primary" size="sm">Save project</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

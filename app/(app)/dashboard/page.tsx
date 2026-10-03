@@ -43,6 +43,79 @@ import {
   currentUser,
   learningProgress,
 } from "@/lib/data";
+import { apiRequest } from "@/lib/client-api";
+import type { Project, Task, TaskStatus } from "@/lib/types";
+
+type DashboardProjectRecord = {
+  id: string;
+  name: string;
+  description: string | null;
+  status: string;
+  createdAt: string;
+  user: { id: string; name: string };
+  tasks: { id: string; status: string }[];
+};
+
+type DashboardTaskRecord = {
+  id: string;
+  title: string;
+  status: string;
+  project: { id: string; name: string };
+  user: { id: string; name: string };
+};
+
+type DashboardResponse = {
+  success: boolean;
+  data: {
+    projects: DashboardProjectRecord[];
+    tasks: DashboardTaskRecord[];
+    stats: { activeProjects: number; completedTasks: number };
+  };
+};
+
+function toDashboardProject(record: DashboardProjectRecord): Project {
+  const totalTasks = record.tasks.length;
+  const doneTasks = record.tasks.filter((task) => task.status === "DONE").length;
+
+  return {
+    id: record.id,
+    name: record.name,
+    slug: `${record.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${record.id.slice(-5)}`,
+    description: record.description ?? "",
+    progress: totalTasks ? Math.round((doneTasks / totalTasks) * 100) : 0,
+    health: record.status === "ACTIVE" ? "on-track" : "at-risk",
+    stack: [],
+    members: [record.user.name],
+    lead: record.user.name,
+    due: "Not set",
+    openTasks: totalTasks - doneTasks,
+    totalTasks,
+    updatedAt: new Date(record.createdAt).toLocaleDateString(),
+  };
+}
+
+function toDashboardTask(record: DashboardTaskRecord): Task {
+  const statusByValue: Record<string, TaskStatus> = {
+    TODO: "todo",
+    IN_PROGRESS: "in-progress",
+    DONE: "done",
+    BLOCKED: "blocked",
+  };
+  const status = statusByValue[record.status] ?? "todo";
+
+  return {
+    id: record.id,
+    key: record.id.slice(0, 8).toUpperCase(),
+    title: record.title,
+    status,
+    priority: "medium",
+    project: record.project.name,
+    assignee: record.user.name,
+    due: "Not set",
+    labels: [],
+    estimate: 0,
+  };
+}
 
 const activityIcons = {
   commit: GitCommitHorizontal,
@@ -55,7 +128,32 @@ const activityIcons = {
 } as const;
 
 export default function DashboardPage() {
-  const todaysTasks = tasks.filter((t) => t.status !== "done").slice(0, 5);
+  const [dashboardData, setDashboardData] = React.useState<DashboardResponse | null>(null);
+  const [dashboardError, setDashboardError] = React.useState("");
+
+  React.useEffect(() => {
+    apiRequest<DashboardResponse>("/api/dashboard")
+      .then((data) => {
+        setDashboardData(data);
+        setDashboardError("");
+      })
+      .catch((error: unknown) => {
+        setDashboardError(error instanceof Error ? error.message : "Failed to load dashboard data");
+      });
+  }, []);
+
+  const dashboardProjects = dashboardData ? dashboardData.data.projects.map(toDashboardProject) : projects;
+  const dashboardTasks = dashboardData ? dashboardData.data.tasks.map(toDashboardTask) : tasks;
+  const visibleStats = dashboardStats.map((stat) => {
+    if (stat.id === "ds1" && dashboardData) {
+      return { ...stat, value: String(dashboardData.data.stats.activeProjects) };
+    }
+    if (stat.id === "ds2" && dashboardData) {
+      return { ...stat, value: String(dashboardData.data.stats.completedTasks) };
+    }
+    return stat;
+  });
+  const todaysTasks = dashboardTasks.filter((t) => t.status !== "done").slice(0, 5);
   const openPrs = pullRequests.filter((p) => p.state === "open");
 
   return (
@@ -77,9 +175,10 @@ export default function DashboardPage() {
       />
 
       <PageBody className="space-y-4">
+        {dashboardError && <p role="alert" className="text-[12px] text-danger">{dashboardError}</p>}
         {/* Stats */}
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {dashboardStats.map((s) => (
+          {visibleStats.map((s) => (
             <StatCard
               key={s.id}
               label={s.label}
@@ -146,7 +245,7 @@ export default function DashboardPage() {
               </Button>
             </div>
             <div className="divide-y divide-border">
-              {projects.slice(0, 4).map((p) => (
+              {dashboardProjects.slice(0, 4).map((p) => (
                 <Link
                   key={p.id}
                   href={`/projects`}
