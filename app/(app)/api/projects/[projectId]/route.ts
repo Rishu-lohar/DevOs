@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
+import { getAuthenticatedUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { projectRelations, updateProjectSchema } from "@/lib/project-validation";
 
 type RouteContext = { params: Promise<{ projectId: string }> };
 
 export async function GET(_request: Request, { params }: RouteContext) {
+  if (!(await getAuthenticatedUser())) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   const { projectId } = await params;
   try {
     const project = await db.project.findUnique({
@@ -20,6 +25,10 @@ export async function GET(_request: Request, { params }: RouteContext) {
 }
 
 export async function PATCH(request: Request, { params }: RouteContext) {
+  if (!(await getAuthenticatedUser())) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   const { projectId } = await params;
   const body: unknown = await request.json().catch(() => undefined);
   const result = updateProjectSchema.safeParse(body);
@@ -52,6 +61,10 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 }
 
 export async function DELETE(_request: Request, { params }: RouteContext) {
+  if (!(await getAuthenticatedUser())) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   const { projectId } = await params;
   try {
     const project = await db.project.findUnique({

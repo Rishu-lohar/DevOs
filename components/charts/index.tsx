@@ -246,9 +246,11 @@ export function DonutChart({
 /** GitHub-style contribution grid built from tokens (no shadows/glow). */
 export function ContributionGrid({
   data,
+  counts,
   weeks = 52,
 }: {
   data: number[];
+  counts?: number[];
   weeks?: number;
 }) {
   const levels = [
@@ -258,7 +260,8 @@ export function ContributionGrid({
     "bg-accent/70",
     "bg-accent",
   ];
-  const cells = data.slice(0, weeks * 7);
+  const cells = data.slice(-weeks * 7);
+  const contributionCounts = counts?.slice(-weeks * 7);
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   return (
@@ -276,7 +279,7 @@ export function ContributionGrid({
             {cells.map((lvl, i) => (
               <span
                 key={i}
-                title={`${lvl * 3} contributions`}
+                title={`${contributionCounts?.[i] ?? lvl * 3} contributions`}
                 className={`h-[9px] w-[9px] rounded-[2px] ${levels[lvl] ?? levels[0]}`}
               />
             ))}

@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
+import { getAuthenticatedUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { taskRelations, updateTaskSchema } from "@/lib/task-validation";
 
 type RouteContext = { params: Promise<{ taskId: string }> };
 
 export async function GET(_request: Request, { params }: RouteContext) {
+  if (!(await getAuthenticatedUser())) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   const { taskId } = await params;
   try {
     const task = await db.task.findUnique({
@@ -20,6 +25,10 @@ export async function GET(_request: Request, { params }: RouteContext) {
 }
 
 export async function PATCH(request: Request, { params }: RouteContext) {
+  if (!(await getAuthenticatedUser())) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   const { taskId } = await params;
   const body: unknown = await request.json().catch(() => undefined);
   const result = updateTaskSchema.safeParse(body);
@@ -67,6 +76,10 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 }
 
 export async function DELETE(_request: Request, { params }: RouteContext) {
+  if (!(await getAuthenticatedUser())) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   const { taskId } = await params;
   try {
     const task = await db.task.findUnique({ where: { id: taskId }, select: { id: true } });

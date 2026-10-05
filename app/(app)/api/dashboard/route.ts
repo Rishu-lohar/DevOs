@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
+import { getAuthenticatedProfile, getAuthenticatedUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 export async function GET() {
+  const user = await getAuthenticatedUser();
+  if (!user) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   try {
-    const [users, projects, tasks, activeProjects, completedTasks] = await Promise.all([
+    const [users, projects, tasks, activeProjects] = await Promise.all([
       db.user.findMany(),
       db.project.findMany({
         include: {
@@ -18,18 +24,17 @@ export async function GET() {
         },
       }),
       db.project.count({ where: { status: "ACTIVE" } }),
-      db.task.count({ where: { status: "DONE" } }),
     ]);
 
     return NextResponse.json({
       success: true,
       data: {
+        profile: getAuthenticatedProfile(user),
         users,
         projects,
         tasks,
         stats: {
           activeProjects,
-          completedTasks,
         },
       },
     });

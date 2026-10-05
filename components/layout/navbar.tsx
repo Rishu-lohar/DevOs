@@ -2,11 +2,14 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Bell, Menu, Moon, Search, Sun } from "lucide-react";
 import { useTheme } from "@/components/providers/theme-provider";
-import { notifications, currentUser } from "@/lib/data";
+import { notifications } from "@/lib/data";
+import type { AuthenticatedProfile } from "@/lib/auth";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,9 +19,37 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
+export function Navbar({
+  onMenuClick,
+  profile,
+}: {
+  onMenuClick: () => void;
+  profile: AuthenticatedProfile;
+}) {
+  const router = useRouter();
   const { theme, toggle } = useTheme();
   const unread = notifications.filter((n) => n.unread).length;
+  const [logoutPending, setLogoutPending] = React.useState(false);
+  const [logoutError, setLogoutError] = React.useState<string | null>(null);
+
+  const logout = async () => {
+    setLogoutPending(true);
+    setLogoutError(null);
+    try {
+      const { error } = await createClient().auth.signOut();
+      if (error) {
+        setLogoutError("Unable to log out. Please try again.");
+        return;
+      }
+
+      router.replace("/login");
+      router.refresh();
+    } catch {
+      setLogoutError("Unable to log out. Please try again.");
+    } finally {
+      setLogoutPending(false);
+    }
+  };
 
   return (
     <header
@@ -117,11 +148,11 @@ export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
               data-testid="user-menu-trigger"
               className="ml-1 flex items-center gap-2 rounded-md p-0.5 pr-1.5 transition-colors duration-[140ms] hover:bg-surface-hover"
             >
-              <Avatar name={currentUser.name} size="md" />
+              <Avatar name={profile.name} src={profile.avatarUrl} size="md" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[220px]">
-            <DropdownMenuLabel>{currentUser.email}</DropdownMenuLabel>
+            <DropdownMenuLabel>{profile.email}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href="/settings" data-testid="user-menu-profile">
@@ -136,10 +167,20 @@ export function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/login" data-testid="user-menu-logout">
-                Log out
-              </Link>
+              <button
+                type="button"
+                onClick={() => void logout()}
+                disabled={logoutPending}
+                data-testid="user-menu-logout"
+              >
+                {logoutPending ? "Logging out…" : "Log out"}
+              </button>
             </DropdownMenuItem>
+            {logoutError && (
+              <p role="alert" className="px-2 py-1 text-[11px] text-danger">
+                {logoutError}
+              </p>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

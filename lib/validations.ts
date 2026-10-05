@@ -24,6 +24,17 @@ export const forgotSchema = z.object({
 });
 export type ForgotValues = z.infer<typeof forgotSchema>;
 
+export const passwordResetSchema = z
+  .object({
+    password: z.string().min(8, "Use at least 8 characters"),
+    confirm: z.string().min(1, "Confirm your password"),
+  })
+  .refine((v) => v.password === v.confirm, {
+    path: ["confirm"],
+    message: "Passwords do not match",
+  });
+export type PasswordResetValues = z.infer<typeof passwordResetSchema>;
+
 export const otpSchema = z.object({
   code: z.string().length(6, "Enter the 6-digit code"),
 });

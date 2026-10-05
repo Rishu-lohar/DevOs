@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
+import { getAuthenticatedUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createProjectSchema, projectRelations } from "@/lib/project-validation";
 
 export async function GET() {
+  if (!(await getAuthenticatedUser())) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   try {
     const projects = await db.project.findMany({
       include: projectRelations,
@@ -17,6 +22,10 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!(await getAuthenticatedUser())) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   const body: unknown = await request.json().catch(() => undefined);
   const result = createProjectSchema.safeParse(body);
   if (!result.success) {

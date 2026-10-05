@@ -18,8 +18,9 @@ import {
   X,
   Zap,
 } from "lucide-react";
-import { navGroups } from "@/lib/navigation";
 import { currentUser } from "@/lib/data";
+import { navGroups } from "@/lib/navigation";
+import type { AuthenticatedProfile } from "@/lib/auth";
 import { Avatar } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
@@ -39,9 +40,11 @@ const icons = {
 export function Sidebar({
   mobileOpen,
   onClose,
+  profile,
 }: {
   mobileOpen: boolean;
   onClose: () => void;
+  profile: AuthenticatedProfile;
 }) {
   const pathname = usePathname();
 
@@ -168,13 +171,13 @@ export function Sidebar({
             onClick={onClose}
             className="flex items-center gap-2 rounded-md px-1.5 py-1.5 transition-colors duration-[140ms] hover:bg-surface-hover"
           >
-            <Avatar name={currentUser.name} size="md" />
+            <Avatar name={profile.name} src={profile.avatarUrl} size="md" />
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[12px] font-medium text-text-primary">
-                {currentUser.name}
+                {profile.name}
               </span>
               <span className="block truncate text-[11px] text-text-muted">
-                {currentUser.email}
+                {profile.email}
               </span>
             </span>
           </Link>

@@ -3,6 +3,8 @@
 import * as React from "react";
 import { GithubIcon } from "@/components/icons/github";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/feedback";
+import { createClient } from "@/lib/supabase/client";
 
 function GoogleGlyph() {
   return (
@@ -16,6 +18,34 @@ function GoogleGlyph() {
 }
 
 export function OAuthButtons({ verb = "Continue" }: { verb?: string }) {
+  const [pendingProvider, setPendingProvider] = React.useState<
+    "google" | "github" | null
+  >(null);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const signIn = async (provider: "google" | "github") => {
+    setError(null);
+    setPendingProvider(provider);
+    try {
+      const { error: authError } = await createClient().auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback${
+            provider === "github" ? "?provider=github" : ""
+          }`,
+          ...(provider === "github" ? { scopes: "read:user repo" } : {}),
+        },
+      });
+      if (authError) {
+        setError("Unable to start sign-in. Please try again.");
+        setPendingProvider(null);
+      }
+    } catch {
+      setError("Unable to start sign-in. Please try again.");
+      setPendingProvider(null);
+    }
+  };
+
   return (
     <div className="space-y-2">
       <Button
@@ -23,21 +53,34 @@ export function OAuthButtons({ verb = "Continue" }: { verb?: string }) {
         variant="secondary"
         size="lg"
         className="w-full"
+        disabled={pendingProvider !== null}
+        onClick={() => void signIn("github")}
         data-testid="oauth-github"
       >
-        <GithubIcon className="h-3.5 w-3.5" />
-        {verb} with GitHub
+        {pendingProvider === "github" ? (
+          <Spinner />
+        ) : (
+          <GithubIcon className="h-3.5 w-3.5" />
+        )}
+        {pendingProvider === "github" ? "Connecting…" : `${verb} with GitHub`}
       </Button>
       <Button
         type="button"
         variant="secondary"
         size="lg"
         className="w-full"
+        disabled={pendingProvider !== null}
+        onClick={() => void signIn("google")}
         data-testid="oauth-google"
       >
-        <GoogleGlyph />
-        {verb} with Google
+        {pendingProvider === "google" ? <Spinner /> : <GoogleGlyph />}
+        {pendingProvider === "google" ? "Connecting…" : `${verb} with Google`}
       </Button>
+      {error && (
+        <p role="alert" className="text-[11px] text-danger">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

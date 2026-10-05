@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
+import { getAuthenticatedUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createTaskSchema, taskRelations } from "@/lib/task-validation";
 
 export async function GET() {
+  if (!(await getAuthenticatedUser())) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   try {
     const tasks = await db.task.findMany({
       include: taskRelations,
@@ -16,6 +21,10 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!(await getAuthenticatedUser())) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   const body: unknown = await request.json().catch(() => undefined);
   const result = createTaskSchema.safeParse(body);
   if (!result.success) {

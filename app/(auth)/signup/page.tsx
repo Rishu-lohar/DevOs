@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import { signupSchema, type SignupValues } from "@/lib/validations";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { FieldError, Input, Label } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/feedback";
@@ -14,6 +15,7 @@ import { AuthDivider, AuthHeading, OAuthButtons } from "@/components/auth/auth-p
 
 export default function SignupPage() {
   const router = useRouter();
+  const [authError, setAuthError] = React.useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -23,9 +25,33 @@ export default function SignupPage() {
     defaultValues: { name: "", email: "", password: "", confirm: "" },
   });
 
-  const onSubmit = async () => {
-    await new Promise((r) => setTimeout(r, 450));
-    router.push("/verify-otp");
+  const onSubmit = async ({ name, email, password }: SignupValues) => {
+    setAuthError(null);
+    try {
+      const { data, error } = await createClient().auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: name },
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        },
+      });
+
+      if (error) {
+        setAuthError(error.message);
+        return;
+      }
+
+      if (data.session) {
+        router.replace("/dashboard");
+        router.refresh();
+        return;
+      }
+
+      router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
+    } catch {
+      setAuthError("Unable to create your account right now. Please try again.");
+    }
   };
 
   return (
@@ -105,6 +131,12 @@ export default function SignupPage() {
           {!isSubmitting && <ArrowRight className="h-3.5 w-3.5" />}
         </Button>
       </form>
+
+      {authError && (
+        <p role="alert" className="mt-3 text-[12px] text-danger">
+          {authError}
+        </p>
+      )}
 
       <p className="mt-6 text-center text-[12px] text-text-muted">
         Already have an account?{" "}
