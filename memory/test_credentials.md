@@ -1,11 +1,11 @@
-# Test Credentials — DevOS Phase-1
+# Test Credentials — DevHub Phase-1
 
 Phase-1 is **frontend-only**: there is no auth backend and no session. Forms validate with Zod
 and then navigate. Any values that pass validation will work.
 
 ## Demo login (prefilled on `/login`)
-- **Email:** `rishu@devos.dev`
-- **Password:** `devos12345`
+- **Email:** `rishu@DevHub.dev`
+- **Password:** `DevHub12345`
 - Submitting navigates to `/dashboard`.
 
 ## Signup
@@ -21,4 +21,4 @@ Any valid email shows the "check your inbox" confirmation state.
 
 ## Notes
 - All dashboard routes are directly reachable without logging in (no route guards in Phase-1).
-- Theme preference persists in `localStorage` under `devos-theme` (`dark` | `light`).
+- Theme preference persists in `localStorage` under `DevHub-theme` (`dark` | `light`).

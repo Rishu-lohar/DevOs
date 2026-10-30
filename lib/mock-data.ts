@@ -12,7 +12,7 @@ export const tasks = [
 ];
 
 export const activities = [
-  { title: "New pull request opened", detail: "rishu-lohar/devos #145", time: "2 minutes ago", type: "commit" },
+  { title: "New pull request opened", detail: "rishu-lohar/DevHub #145", time: "2 minutes ago", type: "commit" },
   { title: "Project milestone completed", detail: "Repository Analyzer", time: "18 minutes ago", type: "project" },
   { title: "AI suggestion ready", detail: "Improve your project structure", time: "1 hour ago", type: "ai" },
   { title: "New team member joined", detail: "@aryan24 joined DevConnect", time: "3 hours ago", type: "team" },

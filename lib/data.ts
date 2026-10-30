@@ -15,7 +15,7 @@ import type {
 export const currentUser = {
   name: "Rishu Lohar",
   handle: "rishu-lohar",
-  email: "rishu@devos.dev",
+  email: "rishu@DevHub.dev",
   role: "Full Stack Engineer",
   plan: "Pro",
   location: "Bengaluru, IN",
@@ -23,12 +23,12 @@ export const currentUser = {
 };
 
 export const members: Member[] = [
-  { id: "m1", name: "Rishu Lohar", role: "Lead Engineer", email: "rishu@devos.dev" },
-  { id: "m2", name: "Aryan Kapoor", role: "Frontend Engineer", email: "aryan@devos.dev" },
-  { id: "m3", name: "Meera Shah", role: "Backend Engineer", email: "meera@devos.dev" },
-  { id: "m4", name: "Jatin Thakur", role: "DevOps Engineer", email: "jatin@devos.dev" },
-  { id: "m5", name: "Priya Menon", role: "Product Designer", email: "priya@devos.dev" },
-  { id: "m6", name: "Karan Bose", role: "QA Engineer", email: "karan@devos.dev" },
+  { id: "m1", name: "Rishu Lohar", role: "Lead Engineer", email: "rishu@DevHub.dev" },
+  { id: "m2", name: "Aryan Kapoor", role: "Frontend Engineer", email: "aryan@DevHub.dev" },
+  { id: "m3", name: "Meera Shah", role: "Backend Engineer", email: "meera@DevHub.dev" },
+  { id: "m4", name: "Jatin Thakur", role: "DevOps Engineer", email: "jatin@DevHub.dev" },
+  { id: "m5", name: "Priya Menon", role: "Product Designer", email: "priya@DevHub.dev" },
+  { id: "m6", name: "Karan Bose", role: "QA Engineer", email: "karan@DevHub.dev" },
 ];
 
 export const projects: Project[] = [
@@ -111,7 +111,7 @@ export const projects: Project[] = [
     id: "p6",
     name: "Design System Core",
     slug: "design-system-core",
-    description: "Token-driven component library shared across all DevOS surfaces.",
+    description: "Token-driven component library shared across all DevHub surfaces.",
     progress: 71,
     health: "on-track",
     stack: ["React", "Tailwind", "Storybook"],
@@ -142,7 +142,7 @@ export const tasks: Task[] = [
 ];
 
 export const repos: Repo[] = [
-  { id: "r1", name: "rishu-lohar/devos-platform", description: "Developer operating system — web client and shell.", language: "TypeScript", stars: 1364, forks: 128, issues: 24, prs: 6, updatedAt: "2d ago", visibility: "public", health: 92 },
+  { id: "r1", name: "rishu-lohar/DevHub-platform", description: "Developer operating system — web client and shell.", language: "TypeScript", stars: 1364, forks: 128, issues: 24, prs: 6, updatedAt: "2d ago", visibility: "public", health: 92 },
   { id: "r2", name: "rishu-lohar/ai-mentor", description: "Lightweight code-reasoning assistant service.", language: "Python", stars: 962, forks: 84, issues: 11, prs: 3, updatedAt: "4d ago", visibility: "public", health: 78 },
   { id: "r3", name: "rishu-lohar/open-source-explorer", description: "Discovery engine for first-time contributors.", language: "TypeScript", stars: 641, forks: 52, issues: 18, prs: 4, updatedAt: "1w ago", visibility: "public", health: 71 },
   { id: "r4", name: "rishu-lohar/telemetry-pipeline", description: "Event ingestion, rollups, and velocity metrics.", language: "Go", stars: 428, forks: 31, issues: 9, prs: 2, updatedAt: "3d ago", visibility: "private", health: 64 },
@@ -151,8 +151,8 @@ export const repos: Repo[] = [
 ];
 
 export const commits: Commit[] = [
-  { id: "c1", sha: "8f3a91c", message: "feat(auth): rotate refresh tokens on reuse detection", author: "Rishu Lohar", repo: "devos-platform", branch: "main", time: "18m ago", additions: 142, deletions: 38 },
-  { id: "c2", sha: "1b7de40", message: "perf(shell): defer non-critical hydration", author: "Aryan Kapoor", repo: "devos-platform", branch: "perf/hydration", time: "1h ago", additions: 64, deletions: 91 },
+  { id: "c1", sha: "8f3a91c", message: "feat(auth): rotate refresh tokens on reuse detection", author: "Rishu Lohar", repo: "DevHub-platform", branch: "main", time: "18m ago", additions: 142, deletions: 38 },
+  { id: "c2", sha: "1b7de40", message: "perf(shell): defer non-critical hydration", author: "Aryan Kapoor", repo: "DevHub-platform", branch: "perf/hydration", time: "1h ago", additions: 64, deletions: 91 },
   { id: "c3", sha: "c02ff8a", message: "fix(analyzer): guard against empty AST nodes", author: "Jatin Thakur", repo: "repository-analyzer", branch: "main", time: "3h ago", additions: 21, deletions: 6 },
   { id: "c4", sha: "77ab125", message: "chore(ds): drop shadow tokens from primitives", author: "Priya Menon", repo: "design-system-core", branch: "main", time: "5h ago", additions: 12, deletions: 210 },
   { id: "c5", sha: "e419b3d", message: "feat(oss): rank good-first-issues by language match", author: "Aryan Kapoor", repo: "open-source-explorer", branch: "feat/ranking", time: "8h ago", additions: 188, deletions: 24 },
@@ -162,8 +162,8 @@ export const commits: Commit[] = [
 ];
 
 export const pullRequests: PullRequest[] = [
-  { id: "pr1", number: 145, title: "Refresh token rotation + reuse detection", repo: "devos-platform", author: "Rishu Lohar", state: "open", reviewers: ["Meera Shah", "Jatin Thakur"], time: "18m ago", additions: 142, deletions: 38, checks: "passing" },
-  { id: "pr2", number: 143, title: "Defer non-critical hydration on app shell", repo: "devos-platform", author: "Aryan Kapoor", state: "open", reviewers: ["Rishu Lohar"], time: "1h ago", additions: 64, deletions: 91, checks: "pending" },
+  { id: "pr1", number: 145, title: "Refresh token rotation + reuse detection", repo: "DevHub-platform", author: "Rishu Lohar", state: "open", reviewers: ["Meera Shah", "Jatin Thakur"], time: "18m ago", additions: 142, deletions: 38, checks: "passing" },
+  { id: "pr2", number: 143, title: "Defer non-critical hydration on app shell", repo: "DevHub-platform", author: "Aryan Kapoor", state: "open", reviewers: ["Rishu Lohar"], time: "1h ago", additions: 64, deletions: 91, checks: "pending" },
   { id: "pr3", number: 88, title: "Repo health scoring v2", repo: "repository-analyzer", author: "Jatin Thakur", state: "draft", reviewers: ["Rishu Lohar", "Karan Bose"], time: "6h ago", additions: 412, deletions: 120, checks: "failing" },
   { id: "pr4", number: 51, title: "Remove shadow utilities from primitives", repo: "design-system-core", author: "Priya Menon", state: "merged", reviewers: ["Aryan Kapoor"], time: "5h ago", additions: 12, deletions: 210, checks: "passing" },
   { id: "pr5", number: 34, title: "Good-first-issue relevance ranking", repo: "open-source-explorer", author: "Aryan Kapoor", state: "open", reviewers: ["Priya Menon"], time: "8h ago", additions: 188, deletions: 24, checks: "passing" },
@@ -171,17 +171,17 @@ export const pullRequests: PullRequest[] = [
 ];
 
 export const issues: Issue[] = [
-  { id: "i1", number: 312, title: "Sidebar collapses unexpectedly on narrow viewports", repo: "devos-platform", author: "Karan Bose", state: "open", labels: ["bug", "ui"], comments: 6, time: "2h ago" },
+  { id: "i1", number: 312, title: "Sidebar collapses unexpectedly on narrow viewports", repo: "DevHub-platform", author: "Karan Bose", state: "open", labels: ["bug", "ui"], comments: 6, time: "2h ago" },
   { id: "i2", number: 309, title: "Light theme contrast fails on muted text", repo: "design-system-core", author: "Priya Menon", state: "open", labels: ["a11y"], comments: 3, time: "7h ago" },
   { id: "i3", number: 298, title: "Analyzer times out on monorepos > 40k files", repo: "repository-analyzer", author: "Jatin Thakur", state: "open", labels: ["performance"], comments: 12, time: "1d ago" },
-  { id: "i4", number: 287, title: "Add keyboard shortcut palette", repo: "devos-platform", author: "Rishu Lohar", state: "open", labels: ["enhancement", "good first issue"], comments: 9, time: "2d ago" },
+  { id: "i4", number: 287, title: "Add keyboard shortcut palette", repo: "DevHub-platform", author: "Rishu Lohar", state: "open", labels: ["enhancement", "good first issue"], comments: 9, time: "2d ago" },
   { id: "i5", number: 271, title: "Document token override strategy", repo: "design-system-core", author: "Aryan Kapoor", state: "closed", labels: ["docs"], comments: 2, time: "4d ago" },
   { id: "i6", number: 266, title: "Kafka rebalance storms under load", repo: "telemetry-pipeline", author: "Meera Shah", state: "open", labels: ["infra", "bug"], comments: 15, time: "5d ago" },
 ];
 
 export const branches: Branch[] = [
-  { id: "b1", name: "main", repo: "devos-platform", author: "Rishu Lohar", ahead: 0, behind: 0, time: "18m ago", isDefault: true },
-  { id: "b2", name: "perf/hydration", repo: "devos-platform", author: "Aryan Kapoor", ahead: 4, behind: 1, time: "1h ago", isDefault: false },
+  { id: "b1", name: "main", repo: "DevHub-platform", author: "Rishu Lohar", ahead: 0, behind: 0, time: "18m ago", isDefault: true },
+  { id: "b2", name: "perf/hydration", repo: "DevHub-platform", author: "Aryan Kapoor", ahead: 4, behind: 1, time: "1h ago", isDefault: false },
   { id: "b3", name: "feat/ranking", repo: "open-source-explorer", author: "Aryan Kapoor", ahead: 7, behind: 0, time: "8h ago", isDefault: false },
   { id: "b4", name: "test/flaky", repo: "repository-analyzer", author: "Karan Bose", ahead: 2, behind: 6, time: "1d ago", isDefault: false },
   { id: "b5", name: "feat/health-v2", repo: "repository-analyzer", author: "Jatin Thakur", ahead: 11, behind: 2, time: "6h ago", isDefault: false },
@@ -209,7 +209,7 @@ export const goodFirstIssues = [
 
 export const contributionSuggestions = [
   { id: "s1", title: "Ship a Tailwind plugin for design tokens", reason: "Matches your design-system work in the last 30 days", impact: "High" },
-  { id: "s2", title: "Triage 5 hydration issues in Next.js", reason: "You resolved 3 similar issues in devos-platform", impact: "Medium" },
+  { id: "s2", title: "Triage 5 hydration issues in Next.js", reason: "You resolved 3 similar issues in DevHub-platform", impact: "Medium" },
   { id: "s3", title: "Improve Prisma enum validation errors", reason: "Overlaps with your Postgres schema experience", impact: "Medium" },
   { id: "s4", title: "Write a Go consumer-lag recipe", reason: "Derived from your telemetry-pipeline commits", impact: "High" },
 ];
@@ -249,9 +249,9 @@ export const bestPractices = [
 
 export const activities: Activity[] = [
   { id: "ac1", type: "pr", title: "Opened PR #145", detail: "Refresh token rotation + reuse detection", time: "18m ago", actor: "Rishu Lohar" },
-  { id: "ac2", type: "commit", title: "Pushed 4 commits", detail: "devos-platform · perf/hydration", time: "1h ago", actor: "Aryan Kapoor" },
+  { id: "ac2", type: "commit", title: "Pushed 4 commits", detail: "DevHub-platform · perf/hydration", time: "1h ago", actor: "Aryan Kapoor" },
   { id: "ac3", type: "task", title: "Moved DEV-412 to In Progress", detail: "DevConnect Mobile", time: "2h ago", actor: "Rishu Lohar" },
-  { id: "ac4", type: "ai", title: "AI review completed", detail: "3 suggestions on repository-analyzer", time: "3h ago", actor: "DevOS Mentor" },
+  { id: "ac4", type: "ai", title: "AI review completed", detail: "3 suggestions on repository-analyzer", time: "3h ago", actor: "DevHub Mentor" },
   { id: "ac5", type: "release", title: "Released v2.4.0", detail: "design-system-core", time: "5h ago", actor: "Priya Menon" },
   { id: "ac6", type: "issue", title: "Closed issue #271", detail: "Document token override strategy", time: "1d ago", actor: "Aryan Kapoor" },
   { id: "ac7", type: "member", title: "Karan Bose joined", detail: "Telemetry Pipeline", time: "2d ago", actor: "Meera Shah" },
@@ -365,7 +365,7 @@ export const mentorSeedThread = [
 ];
 
 export const notifications = [
-  { id: "nt1", title: "PR #145 needs your review", detail: "devos-platform · Meera Shah requested review", time: "12m ago", unread: true },
+  { id: "nt1", title: "PR #145 needs your review", detail: "DevHub-platform · Meera Shah requested review", time: "12m ago", unread: true },
   { id: "nt2", title: "Checks failed on #88", detail: "repository-analyzer · 2 failing jobs", time: "1h ago", unread: true },
   { id: "nt3", title: "AI Mentor finished analysis", detail: "3 suggestions ready", time: "3h ago", unread: true },
   { id: "nt4", title: "Sprint 14 ends tomorrow", detail: "6 open tasks remaining", time: "1d ago", unread: false },
@@ -379,8 +379,8 @@ export const dashboardStats = [
 ];
 
 export const githubActions = [
-  { id: "ga1", name: "CI · build & test", repo: "devos-platform", status: "passing" as const, duration: "3m 12s", time: "18m ago" },
-  { id: "ga2", name: "Preview deploy", repo: "devos-platform", status: "passing" as const, duration: "1m 44s", time: "18m ago" },
+  { id: "ga1", name: "CI · build & test", repo: "DevHub-platform", status: "passing" as const, duration: "3m 12s", time: "18m ago" },
+  { id: "ga2", name: "Preview deploy", repo: "DevHub-platform", status: "passing" as const, duration: "1m 44s", time: "18m ago" },
   { id: "ga3", name: "Analyzer benchmark", repo: "repository-analyzer", status: "failing" as const, duration: "6m 08s", time: "6h ago" },
   { id: "ga4", name: "Publish package", repo: "design-system-core", status: "passing" as const, duration: "58s", time: "5h ago" },
   { id: "ga5", name: "Integration suite", repo: "telemetry-pipeline", status: "running" as const, duration: "—", time: "now" },

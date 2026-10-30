@@ -69,7 +69,7 @@ function LandingNav() {
           <span className="flex h-5 w-5 items-center justify-center rounded-[5px] bg-accent text-accent-foreground">
             <Terminal className="h-3 w-3" />
           </span>
-          <span className="text-[14px] font-semibold tracking-[-0.015em]">DevOS</span>
+          <span className="text-[14px] font-semibold tracking-[-0.015em]">DevHub</span>
         </Link>
 
         <nav className="hidden flex-1 items-center gap-1 md:flex">
@@ -255,7 +255,7 @@ function Hero() {
               <span className="h-2 w-2 rounded-full bg-border-strong" />
               <span className="h-2 w-2 rounded-full bg-border-strong" />
               <span className="ml-2 font-mono text-[10px] text-text-muted">
-                devos.dev/dashboard
+                DevHub.dev/dashboard
               </span>
             </div>
             <div className="grid grid-cols-[150px_1fr] divide-x divide-border">
@@ -460,7 +460,7 @@ function AiSection() {
             An assistant that has actually read your codebase
           </h2>
           <p className="mt-3 text-[14px] leading-relaxed text-text-secondary">
-            DevOS indexes repositories, commits and review history so guidance is
+            DevHub indexes repositories, commits and review history so guidance is
             grounded in your architecture — not generic advice.
           </p>
           <ul className="mt-6 space-y-2.5">
@@ -493,7 +493,7 @@ function AiSection() {
         >
           <div className="flex items-center gap-2 border-b border-border px-3 py-2">
             <Sparkles className="h-3.5 w-3.5 text-accent" />
-            <span className="text-[12px] font-medium">DevOS Mentor</span>
+            <span className="text-[12px] font-medium">DevHub Mentor</span>
             <Badge variant="outline" className="ml-auto">indexed 6 repos</Badge>
           </div>
           <div className="space-y-3 p-4">
@@ -554,7 +554,7 @@ function GithubSection() {
             </div>
             <div className="divide-y divide-border">
               {[
-                { i: GitPullRequest, t: "Refresh token rotation + reuse detection", m: "devos-platform #145 · passing", c: "text-success" },
+                { i: GitPullRequest, t: "Refresh token rotation + reuse detection", m: "DevHub-platform #145 · passing", c: "text-success" },
                 { i: GitBranch, t: "Defer non-critical hydration", m: "perf/hydration · 4 commits ahead", c: "text-accent" },
                 { i: Zap, t: "Repo health scoring v2", m: "repository-analyzer #88 · 2 checks failing", c: "text-danger" },
                 { i: ShieldCheck, t: "Removed shadow utilities from primitives", m: "design-system-core #51 · merged", c: "text-text-muted" },
@@ -618,7 +618,7 @@ function GithubSection() {
 /* ----------------------------- Testimonials ------------------------------ */
 
 const testimonials = [
-  { q: "DevOS replaced four tabs and a spreadsheet. Our review latency dropped by half in one sprint.", n: "Sarup Banskota", r: "Head of Growth" },
+  { q: "DevHub replaced four tabs and a spreadsheet. Our review latency dropped by half in one sprint.", n: "Sarup Banskota", r: "Head of Growth" },
   { q: "The density is the feature. Everything I need is one keystroke away and nothing is decorative.", n: "Meera Shah", r: "Backend Engineer" },
   { q: "The AI actually understands our module boundaries, so its suggestions land instead of annoying us.", n: "Jatin Thakur", r: "DevOps Engineer" },
 ];
@@ -667,11 +667,11 @@ function Testimonials() {
 /* ---------------------------------- FAQ ---------------------------------- */
 
 const faqs = [
-  { q: "Is DevOS free to start?", a: "Yes. The free tier includes unlimited personal projects, three connected repositories and the full task workspace." },
+  { q: "Is DevHub free to start?", a: "Yes. The free tier includes unlimited personal projects, three connected repositories and the full task workspace." },
   { q: "Do I need to connect GitHub?", a: "No. You can plan projects and tasks without connecting anything. Connecting a repository unlocks commits, PRs, branches and health scoring." },
   { q: "How does the AI mentor get context?", a: "It indexes repository structure, commit history and review threads you explicitly connect. Nothing is indexed without your action." },
-  { q: "Does DevOS support light mode?", a: "Both themes ship from the same token system, so every surface adapts instantly without any component changes." },
-  { q: "Can I use DevOS with my team?", a: "Yes. Projects support shared members, review queues and activity streams across the whole workspace." },
+  { q: "Does DevHub support light mode?", a: "Both themes ship from the same token system, so every surface adapts instantly without any component changes." },
+  { q: "Can I use DevHub with my team?", a: "Yes. Projects support shared members, review queues and activity streams across the whole workspace." },
 ];
 
 function Faq() {
@@ -734,7 +734,7 @@ function Cta() {
         className="relative mx-auto max-w-[720px] px-5 text-center"
       >
         <h2 className="text-[32px] font-semibold leading-[1.12] tracking-[-0.03em] text-text-primary">
-          Start building with DevOS today
+          Start building with DevHub today
         </h2>
         <p className="mx-auto mt-3 max-w-md text-[14px] leading-relaxed text-text-secondary">
           Free forever for personal projects. No credit card, no setup call, no
@@ -772,7 +772,7 @@ function Footer() {
               <span className="flex h-5 w-5 items-center justify-center rounded-[5px] bg-accent text-accent-foreground">
                 <Terminal className="h-3 w-3" />
               </span>
-              <span className="text-[14px] font-semibold tracking-[-0.015em]">DevOS</span>
+              <span className="text-[14px] font-semibold tracking-[-0.015em]">DevHub</span>
             </Link>
             <p className="mt-3 max-w-[200px] text-[12px] leading-relaxed text-text-muted">
               Empowering the next generation of developers.
@@ -797,7 +797,7 @@ function Footer() {
         </div>
         <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-6">
           <p className="text-[11px] text-text-muted">
-            © {new Date().getFullYear()} DevOS. Build · Collaborate · Grow.
+            © {new Date().getFullYear()} DevHub. Build · Collaborate · Grow.
           </p>
           <p className="text-[11px] text-text-muted">Made for developers, by developers.</p>
         </div>

@@ -35,7 +35,7 @@ import {
 export default function WorkspacePage() {
   const project = projects[0];
   const projectTasks = tasks.filter((t) => t.project === project.name);
-  const projectBranches = branches.filter((b) => b.repo === "devos-platform");
+  const projectBranches = branches.filter((b) => b.repo === "DevHub-platform");
 
   return (
     <>

@@ -18,7 +18,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = React.useState<Theme>("dark");
 
   React.useEffect(() => {
-    const stored = window.localStorage.getItem("devos-theme") as Theme | null;
+    const stored = window.localStorage.getItem("DevHub-theme") as Theme | null;
     if (stored === "light" || stored === "dark") setThemeState(stored);
   }, []);
 
@@ -26,7 +26,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const root = document.documentElement;
     root.classList.remove("dark", "light");
     root.classList.add(theme);
-    window.localStorage.setItem("devos-theme", theme);
+    window.localStorage.setItem("DevHub-theme", theme);
   }, [theme]);
 
   const setTheme = React.useCallback((t: Theme) => setThemeState(t), []);

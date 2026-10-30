@@ -17,7 +17,7 @@ export default function AuthLayout({
             <span className="flex h-5 w-5 items-center justify-center rounded-[5px] bg-accent text-accent-foreground">
               <Terminal className="h-3 w-3" />
             </span>
-            <span className="text-[14px] font-semibold tracking-[-0.015em]">DevOS</span>
+            <span className="text-[14px] font-semibold tracking-[-0.015em]">DevHub</span>
           </Link>
 
           <div className="max-w-md">
@@ -33,7 +33,7 @@ export default function AuthLayout({
 
             <div className="mt-8 rounded-xl border border-border bg-card p-4">
               <p className="text-[12px] leading-relaxed text-text-secondary">
-                “DevOS replaced four tabs and a spreadsheet. Our review latency
+                “DevHub replaced four tabs and a spreadsheet. Our review latency
                 dropped by half in one sprint.”
               </p>
               <div className="mt-3 flex items-center gap-2.5 border-t border-border pt-3">

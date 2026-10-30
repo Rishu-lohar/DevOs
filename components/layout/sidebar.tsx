@@ -79,7 +79,7 @@ export function Sidebar({
               <Terminal className="h-3 w-3" />
             </span>
             <span className="text-[13px] font-semibold tracking-[-0.015em] text-text-primary">
-              DevOS
+              DevHub
             </span>
           </Link>
           <button
@@ -151,7 +151,7 @@ export function Sidebar({
             <div className="flex items-center gap-2">
               <Zap className="h-3 w-3 shrink-0 text-accent" strokeWidth={2} />
               <p className="flex-1 truncate text-[12px] font-medium text-text-primary">
-                DevOS {currentUser.plan}
+                DevHub {currentUser.plan}
               </p>
               <span className="rounded border border-success/30 bg-success-subtle px-1 text-[10px] font-medium text-success">
                 Active

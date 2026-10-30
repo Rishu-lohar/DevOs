@@ -222,7 +222,7 @@ export function GitHubWorkspace({
             <EmptyState
               icon={<GithubIcon className="h-4 w-4" />}
               title="GitHub is not connected"
-              description="Authorize read access to your profile and repositories. DevOS will not write to GitHub."
+              description="Authorize read access to your profile and repositories. DevHub will not write to GitHub."
               action={
                 <ConnectGitHubButton
                   linked={false}
@@ -393,7 +393,7 @@ export function GitHubWorkspace({
                 description={
                   overview?.repositories.length
                     ? "Try changing the search or visibility filter."
-                    : "This GitHub account does not have repositories available to DevOS."
+                    : "This GitHub account does not have repositories available to DevHub."
                 }
               />
             </Card>

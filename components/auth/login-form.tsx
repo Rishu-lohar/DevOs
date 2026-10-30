@@ -58,7 +58,7 @@ export function LoginForm({ hasAuthError }: { hasAuthError: boolean }) {
 
   return (
     <div data-testid="login-page">
-      <AuthHeading title="Welcome back" subtitle="Log in to your DevOS workspace." />
+      <AuthHeading title="Welcome back" subtitle="Log in to your DevHub workspace." />
 
       <OAuthButtons />
       <div className="my-5">

@@ -7,7 +7,7 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DevOS — Build Better. Together. Grow Faster.",
+  title: "DevHub — Build Better. Together. Grow Faster.",
   description:
     "An intelligent developer operating system to plan projects, collaborate with teams, analyse repositories and learn industry practices.",
 };

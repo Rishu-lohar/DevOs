@@ -6,7 +6,7 @@ async function main() {
   const user = await db.user.create({
     data: {
       name: "Rishu",
-      email: "rishu@devos.com",
+      email: "rishu@DevHub.com",
     },
   });
 

@@ -58,7 +58,7 @@ export default function SignupPage() {
     <div data-testid="signup-page">
       <AuthHeading
         title="Create your account"
-        subtitle="Join the DevOS developer community."
+        subtitle="Join the DevHub developer community."
       />
 
       <OAuthButtons verb="Sign up" />

@@ -47,7 +47,7 @@ export function VerifyEmailForm({ initialEmail }: { initialEmail: string }) {
       </div>
       <AuthHeading
         title="Verify your email"
-        subtitle="Check your inbox for a verification link. Open it to finish setting up your DevOS account."
+        subtitle="Check your inbox for a verification link. Open it to finish setting up your DevHub account."
       />
 
       <form onSubmit={resendEmail} className="space-y-4">

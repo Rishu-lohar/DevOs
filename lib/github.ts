@@ -8,8 +8,8 @@ import type { GitHubAnalytics } from "@/lib/github-analytics-types";
 
 const GITHUB_API = "https://api.github.com";
 const GITHUB_API_VERSION = "2022-11-28";
-const GITHUB_TOKEN_COOKIE = "devos_github_provider_token";
-const GITHUB_TOKEN_USER_COOKIE = "devos_github_provider_user";
+const GITHUB_TOKEN_COOKIE = "DevHub_github_provider_token";
+const GITHUB_TOKEN_USER_COOKIE = "DevHub_github_provider_user";
 const GITHUB_TOKEN_MAX_AGE = 60 * 60 * 24 * 30;
 const PAGE_SIZE = 100;
 

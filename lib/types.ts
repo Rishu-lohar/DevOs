@@ -1,4 +1,4 @@
-/** Shared domain types for DevOS Phase-1 (frontend-only, dummy data). */
+/** Shared domain types for DevHub Phase-1 (frontend-only, dummy data). */
 
 export type TaskStatus = "todo" | "in-progress" | "review" | "done" | "blocked";
 export type Priority = "urgent" | "high" | "medium" | "low";

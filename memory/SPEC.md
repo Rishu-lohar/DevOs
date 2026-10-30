@@ -1,7 +1,7 @@
-# DevOS — Phase-1 Frontend Specification
+# DevHub — Phase-1 Frontend Specification
 
 ## What the app is
-DevOS is a developer operating system: a dense, keyboard-first workspace where engineers plan
+DevHub is a developer operating system: a dense, keyboard-first workspace where engineers plan
 projects, track tasks, review GitHub activity, discover open source work, read industry
 intelligence, track personal growth and consult an AI mentor.
 
@@ -25,7 +25,7 @@ No Vite. No React SPA.
   (`bg-surface`, `text-text-muted`, `border-border`, `text-accent`, …).
 - **Dark is default** (`.dark` on `<html>`); **light** is a full token override (`.light`).
   Theme lives in `components/providers/theme-provider.tsx`, persisted to `localStorage`
-  under `devos-theme`. Components never hardcode a colour, so no component changes are
+  under `DevHub-theme`. Components never hardcode a colour, so no component changes are
   needed to add a theme.
 - **Density**: body 13px, page title 18px, card title 13px, meta 11–12px. Controls are
   h-7/h-8/h-9. Radii 4–16px. Depth comes from spacing + 1px borders — **no heavy shadows**.

@@ -123,13 +123,13 @@ export default function DashboardPage() {
       id: "active-projects",
       label: "Active projects",
       value: dashboardData ? String(dashboardData.data.stats.activeProjects) : "—",
-      hint: "DevOS workspace",
+      hint: "DevHub workspace",
     },
     {
       id: "tasks-completed",
       label: "Tasks completed",
       value: dashboardData ? String(taskCounts.done) : "—",
-      hint: "DevOS workspace",
+      hint: "DevHub workspace",
     },
     {
       id: "contributions",
@@ -231,7 +231,7 @@ export default function DashboardPage() {
           <Card>
             <div className="border-b border-border px-4 py-2.5">
               <p className="text-[13px] font-medium text-text-primary">Task summary</p>
-              <p className="text-[11px] text-text-muted">DevOS task statuses</p>
+              <p className="text-[11px] text-text-muted">DevHub task statuses</p>
             </div>
             <div className="p-4">
               {dashboardData && hasTasks ? (
@@ -303,7 +303,7 @@ export default function DashboardPage() {
               {dashboardData && dashboardProjects.length === 0 && (
                 <EmptyState
                   title="No projects yet"
-                  description="Projects you create in DevOS will appear here."
+                  description="Projects you create in DevHub will appear here."
                 />
               )}
               {!dashboardData && dashboardError && (

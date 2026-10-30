@@ -47,7 +47,7 @@ export default function ResetPasswordPage() {
     <div data-testid="reset-password-page">
       <AuthHeading
         title="Choose a new password"
-        subtitle="Enter and confirm the new password for your DevOS account."
+        subtitle="Enter and confirm the new password for your DevHub account."
       />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>

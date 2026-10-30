@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ============================================================
-   DevOS — SEMANTIC DESIGN TOKENS (single source of truth)
+   DevHub — SEMANTIC DESIGN TOKENS (single source of truth)
    Mirrors lib/design-tokens.ts. Components consume ONLY these.
    ============================================================ */
 

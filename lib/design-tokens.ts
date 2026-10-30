@@ -1,5 +1,5 @@
 /**
- * DevOS Central Design Token System
+ * DevHub Central Design Token System
  * ---------------------------------------------------------------
  * SINGLE SOURCE OF TRUTH for the entire design language.
  * Every component consumes these tokens via CSS variables
