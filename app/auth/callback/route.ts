@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { storeGitHubProviderToken } from "@/lib/github";
+import { ensurePrismaUser } from "@/lib/ensure-prisma-user";
 
 const allowedDestinations = new Set([
   "/dashboard",
@@ -37,6 +38,8 @@ export async function GET(request: NextRequest) {
   }
 
   if (data.session) {
+    await ensurePrismaUser(data.session.user);
+
     const isGitHubProvider =
       requestUrl.searchParams.get("provider") === "github" ||
       (requestUrl.searchParams.get("provider") === null &&

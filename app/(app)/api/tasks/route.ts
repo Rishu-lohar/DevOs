@@ -1,15 +1,24 @@
 import { NextResponse } from "next/server";
-import { getAuthenticatedUser } from "@/lib/auth";
+import { getAuthenticatedPrismaUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createTaskSchema, taskRelations } from "@/lib/task-validation";
+import { getProjectAccess } from "@/lib/project-access";
 
 export async function GET() {
-  if (!(await getAuthenticatedUser())) {
+  const currentUser = await getAuthenticatedPrismaUser();
+  if (!currentUser) {
     return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
   try {
     const tasks = await db.task.findMany({
+      where: {
+        OR: [
+          { userId: currentUser.id },
+          { project: { userId: currentUser.id } },
+          { project: { members: { some: { userId: currentUser.id } } } },
+        ],
+      },
       include: taskRelations,
       orderBy: { createdAt: "desc" },
     });
@@ -21,7 +30,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!(await getAuthenticatedUser())) {
+  const currentUser = await getAuthenticatedPrismaUser();
+  if (!currentUser) {
     return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
@@ -35,17 +45,19 @@ export async function POST(request: Request) {
   }
 
   try {
-    const [project, user] = await Promise.all([
-      db.project.findUnique({ where: { id: result.data.projectId }, select: { id: true } }),
-      db.user.findUnique({ where: { id: result.data.userId }, select: { id: true } }),
-    ]);
-    if (!project) return NextResponse.json({ error: "Project not found" }, { status: 404 });
-    if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    const access = await getProjectAccess(result.data.projectId, currentUser.id);
+    if (!access) return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    if (!access.role) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     const status = result.data.status ?? "TODO";
+    const { dueDate, ...taskData } = result.data;
     const task = await db.task.create({
       data: {
-        ...result.data,
+        ...taskData,
+        userId: currentUser.id,
+        dueDate: dueDate ? new Date(`${dueDate}T00:00:00.000Z`) : null,
         status,
         completed: status === "DONE",
       },

@@ -1,15 +1,22 @@
 import { NextResponse } from "next/server";
-import { getAuthenticatedUser } from "@/lib/auth";
+import { getAuthenticatedPrismaUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createProjectSchema, projectRelations } from "@/lib/project-validation";
 
 export async function GET() {
-  if (!(await getAuthenticatedUser())) {
+  const currentUser = await getAuthenticatedPrismaUser();
+  if (!currentUser) {
     return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
   try {
     const projects = await db.project.findMany({
+      where: {
+        OR: [
+          { userId: currentUser.id },
+          { members: { some: { userId: currentUser.id } } },
+        ],
+      },
       include: projectRelations,
       orderBy: { createdAt: "desc" },
     });
@@ -22,7 +29,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!(await getAuthenticatedUser())) {
+  const currentUser = await getAuthenticatedPrismaUser();
+  if (!currentUser) {
     return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
@@ -36,13 +44,14 @@ export async function POST(request: Request) {
   }
 
   try {
-    const user = await db.user.findUnique({ where: { id: result.data.userId }, select: { id: true } });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
     const project = await db.project.create({
-      data: result.data,
+      data: {
+        ...result.data,
+        userId: currentUser.id,
+        members: {
+          create: { userId: currentUser.id, role: "OWNER" },
+        },
+      },
       include: projectRelations,
     });
     return NextResponse.json(project, { status: 201 });

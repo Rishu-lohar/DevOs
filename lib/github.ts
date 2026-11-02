@@ -68,6 +68,7 @@ export class GitHubIntegrationError extends Error {
   constructor(
     readonly code:
       | "unauthenticated"
+      | "identity_mismatch"
       | "not_connected"
       | "missing_token"
       | "scope"
@@ -129,6 +130,17 @@ type GitHubCommitResponse = {
   };
   author: { login: string } | null;
   html_url: string;
+};
+
+type GitHubPullRequestResponse = {
+  number: number;
+  title: string;
+  state: "open" | "closed";
+  draft: boolean;
+  html_url: string;
+  created_at: string;
+  updated_at: string;
+  user: { login: string } | null;
 };
 
 type GitHubGraphQLResponse<T> = {
@@ -249,7 +261,7 @@ export async function storeGitHubProviderToken(
   }
 }
 
-async function getGitHubAccess() {
+async function getGitHubAccess(expectedSupabaseUserId?: string) {
   const supabase = await createClient();
   const cookieStore = await cookies();
   const {
@@ -275,6 +287,9 @@ async function getGitHubAccess() {
   }
 
   if (!user) throw new GitHubIntegrationError("unauthenticated");
+  if (expectedSupabaseUserId && user.id !== expectedSupabaseUserId) {
+    throw new GitHubIntegrationError("identity_mismatch");
+  }
   if (!isLinkedToGitHub(user)) {
     throw new GitHubIntegrationError("not_connected");
   }
@@ -965,6 +980,91 @@ async function fetchOverview(accessToken: string): Promise<GitHubOverview> {
         repositories.filter((repository) => repository.visibility === "private").length,
     },
     repositories,
+  };
+}
+
+async function getMcpGitHubContext(expectedSupabaseUserId: string, fullName?: string) {
+  const { accessToken, user } = await getGitHubAccess(expectedSupabaseUserId);
+  const metadataLogin = user.user_metadata.user_name;
+  const profileResponse = await githubResponse(
+    accessToken,
+    "/user",
+    typeof metadataLogin === "string" ? metadataLogin : null,
+  );
+  const profile = (await profileResponse.json()) as GitHubProfileResponse;
+  const scopes = new Set(
+    (profileResponse.headers.get("x-oauth-scopes") ?? "")
+      .split(/[,\s]+/)
+      .filter(Boolean),
+  );
+  if (!scopes.has("repo")) throw new GitHubIntegrationError("scope");
+
+  const repositories = await getAllRepositories(accessToken, profile.login);
+  if (
+    fullName &&
+    !repositories.some((repository) => repository.full_name.toLowerCase() === fullName.toLowerCase())
+  ) {
+    throw new GitHubIntegrationError("not_found");
+  }
+  return { accessToken, login: profile.login, repositories };
+}
+
+export async function listGitHubRepositoriesForMcp(expectedSupabaseUserId: string) {
+  const { repositories } = await getMcpGitHubContext(expectedSupabaseUserId);
+  return repositories.slice(0, 100).map((repository) => ({
+    fullName: repository.full_name,
+    description: repository.description,
+    visibility: repository.private ? "private" : "public",
+    language: repository.language,
+    defaultBranch: repository.default_branch,
+    updatedAt: repository.updated_at,
+    htmlUrl: repository.html_url,
+  }));
+}
+
+export async function getGitHubRepositoryForMcp(
+  expectedSupabaseUserId: string,
+  fullName: string,
+) {
+  const { accessToken, login } = await getMcpGitHubContext(expectedSupabaseUserId, fullName);
+  const [owner, repository] = fullName.split("/");
+  const basePath = `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repository)}`;
+  const [branches, commits, pullRequests] = await Promise.all([
+    getAllBranches(accessToken, basePath),
+    githubGet<GitHubCommitResponse[]>(
+      accessToken,
+      `${basePath}/commits?per_page=10`,
+      login,
+    ),
+    githubGet<GitHubPullRequestResponse[]>(
+      accessToken,
+      `${basePath}/pulls?state=all&sort=updated&direction=desc&per_page=20`,
+      login,
+    ),
+  ]);
+  return {
+    fullName,
+    branches: branches.slice(0, 100).map((branch) => ({
+      name: branch.name,
+      lastCommitSha: branch.commit.sha,
+    })),
+    commits: commits.map((commit) => ({
+      sha: commit.sha,
+      message: commit.commit.message.split("\n", 1)[0] ?? "",
+      author: commit.author?.login ?? commit.commit.author?.name ?? "Unknown",
+      date: commit.commit.author?.date ?? null,
+      htmlUrl: commit.html_url,
+    })),
+    pullRequests: pullRequests.map((pullRequest) => ({
+      number: pullRequest.number,
+      title: pullRequest.title,
+      state: pullRequest.state,
+      draft: pullRequest.draft,
+      author: pullRequest.user?.login ?? "Unknown",
+      createdAt: pullRequest.created_at,
+      updatedAt: pullRequest.updated_at,
+      htmlUrl: pullRequest.html_url,
+    })),
   };
 }
 

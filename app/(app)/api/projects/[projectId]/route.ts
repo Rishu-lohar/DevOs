@@ -1,17 +1,23 @@
 import { NextResponse } from "next/server";
-import { getAuthenticatedUser } from "@/lib/auth";
+import { getAuthenticatedPrismaUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { projectRelations, updateProjectSchema } from "@/lib/project-validation";
+import { canManageProject, getProjectAccess } from "@/lib/project-access";
 
 type RouteContext = { params: Promise<{ projectId: string }> };
 
 export async function GET(_request: Request, { params }: RouteContext) {
-  if (!(await getAuthenticatedUser())) {
+  const currentUser = await getAuthenticatedPrismaUser();
+  if (!currentUser) {
     return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
   const { projectId } = await params;
   try {
+    const access = await getProjectAccess(projectId, currentUser.id);
+    if (!access) return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    if (!access.role) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
     const project = await db.project.findUnique({
       where: { id: projectId },
       include: projectRelations,
@@ -25,7 +31,8 @@ export async function GET(_request: Request, { params }: RouteContext) {
 }
 
 export async function PATCH(request: Request, { params }: RouteContext) {
-  if (!(await getAuthenticatedUser())) {
+  const currentUser = await getAuthenticatedPrismaUser();
+  if (!currentUser) {
     return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
@@ -40,12 +47,10 @@ export async function PATCH(request: Request, { params }: RouteContext) {
   }
 
   try {
-    const existing = await db.project.findUnique({ where: { id: projectId }, select: { id: true } });
-    if (!existing) return NextResponse.json({ error: "Project not found" }, { status: 404 });
-
-    if (result.data.userId) {
-      const user = await db.user.findUnique({ where: { id: result.data.userId }, select: { id: true } });
-      if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    const access = await getProjectAccess(projectId, currentUser.id);
+    if (!access) return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    if (!canManageProject(access.role)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const project = await db.project.update({
@@ -61,15 +66,22 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 }
 
 export async function DELETE(_request: Request, { params }: RouteContext) {
-  if (!(await getAuthenticatedUser())) {
+  const currentUser = await getAuthenticatedPrismaUser();
+  if (!currentUser) {
     return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
   const { projectId } = await params;
   try {
+    const access = await getProjectAccess(projectId, currentUser.id);
+    if (!access) return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    if (access.role !== "OWNER") {
+      return NextResponse.json({ error: "Only the project Owner can delete this project" }, { status: 403 });
+    }
+
     const project = await db.project.findUnique({
       where: { id: projectId },
-      select: { id: true, _count: { select: { tasks: true } } },
+      select: { id: true, userId: true, _count: { select: { tasks: true } } },
     });
     if (!project) return NextResponse.json({ error: "Project not found" }, { status: 404 });
     if (project._count.tasks > 0) {

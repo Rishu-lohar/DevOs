@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import type { User } from "@supabase/supabase-js";
+import { ensurePrismaUser } from "@/lib/ensure-prisma-user";
+import { prisma } from "@/lib/prisma";
 
 export type AuthenticatedProfile = {
   name: string;
@@ -40,4 +42,21 @@ export async function getAuthenticatedUser() {
     if (isMissingAuthSession(error)) return null;
     throw error;
   }
+}
+
+export async function getAuthenticatedPrismaUser() {
+  const user = await getAuthenticatedUser();
+  if (!user) return null;
+
+  const prismaUser = await ensurePrismaUser(user);
+  return prismaUser;
+}
+
+export async function getAuthenticatedPrismaUserById() {
+  const currentUser = await getAuthenticatedPrismaUser();
+  if (!currentUser) return null;
+
+  return prisma.user.findUnique({
+    where: { id: currentUser.id },
+  });
 }
